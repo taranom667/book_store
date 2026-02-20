@@ -13,6 +13,7 @@ class AllObjectsUserManager(CustomManager):
 
 
 class User(AbstractUser):
+    id = models.AutoField(primary_key=True)
     phone_number = models.CharField(max_length=11, unique=True)
     national_code = models.CharField(max_length=11, unique=True, null=True, blank=True)
     birth_day = models.DateField(null=True, blank=True)
@@ -20,3 +21,5 @@ class User(AbstractUser):
 
     objects = CustomManager()
     all_objects = AllObjectsUserManager()
+    def __str__(self):
+        return self.username

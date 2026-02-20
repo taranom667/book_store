@@ -1,10 +1,12 @@
 from django.shortcuts import render
-from rest_framework import status
+from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import RegisterUserSerializer
 from rest_framework.permissions import AllowAny
-
+from .permissions import CustomPermission
+from .models import User
+from django.db.models import Count
 
 # Create your views here.
 class RegisterUserApi(APIView):
@@ -19,3 +21,9 @@ class RegisterUserApi(APIView):
         else:
             return Response({"result": "something went wrong"}, status=200)
         return Response({"result": {"user_id": user.id}}, status=status.HTTP_200_OK)
+
+
+class Users(generics.ListCreateAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = RegisterUserSerializer
+    queryset = User.objects.all()

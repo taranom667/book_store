@@ -1,15 +1,16 @@
 from django.shortcuts import render
-# Create your views here.
 from django.shortcuts import render
 import json
 from django.http import HttpResponse, JsonResponse
 import datetime
 from django.views.decorators.csrf import csrf_exempt
 from .models import Book
-from .forms import CreateBook
 from rest_framework.views import APIView
 from .serializers import BookSerializer
 from rest_framework import generics
+from django.db.models import Count
+from rest_framework.permissions import IsAuthenticated,AllowAny
+
 
 def current_datetime(request):
     print('request method is', request.method)
@@ -70,24 +71,24 @@ class BookAPI(APIView):
         books = list(Book.objects.values_list())
         return JsonResponse(books, safe=False)
 
-    def delete(self, request,id):
-        Book.objects.get(id=id).delete()
 
 class BOOKGenericsAPIGet(generics.ListCreateAPIView):
+    permission_classes = (AllowAny,)
     serializer_class = BookSerializer
-    queryset =Book.objects.all()
+    queryset = Book.objects.all()
+    #queryset = Book.objects.annotate(total_images=Count('image_query'))
 
 
 class BOOKGenericsAPIDelete(generics.RetrieveDestroyAPIView):
-   serializer_class = BookSerializer
-   queryset = Book.objects.all()
-   lookup_field = 'id'
+    serializer_class = BookSerializer
+    queryset = Book.objects.all()
+    lookup_field = 'id'
+
 
 class BOOKGenericsAPIPut(generics.UpdateAPIView):
     lookup_field = 'id'
     serializer_class = BookSerializer
     queryset = Book.objects.all()
-
 
 
 class BOOKGenericsAPIPost(generics.CreateAPIView):
