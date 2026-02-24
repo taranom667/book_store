@@ -1,5 +1,7 @@
-from .models import User
-from rest_framework import serializers
+from rest_framework.response import Response
+
+from .models import User, Author
+from rest_framework import serializers, status
 
 
 class RegisterUserSerializer(serializers.ModelSerializer):
@@ -42,5 +44,14 @@ class RegisterUserSerializer(serializers.ModelSerializer):
         else:
             return value
 
-    def to_representation(self, instance):
-        data = super().to
+
+
+
+class RegisterAuthorSerializer(serializers.ModelSerializer):
+    def create(self,validated_data):
+        autor = Author.objects.create(**validated_data)
+        return autor
+    class Meta:
+        model = Author
+        fields=['name', 'phone_number', 'national_code','username','birth_day','is_deleted','nickname']
+

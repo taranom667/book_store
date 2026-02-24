@@ -28,4 +28,10 @@ class User(AbstractUser):
 
 class Author(User):
     name = models.CharField(max_length=100, unique=True, default="unknown")
+    nickname = models.CharField(max_length=100, null=True, blank=True)
 
+    class Meta:
+        verbose_name = "Author"
+
+    def __str__(self):
+            return self.username

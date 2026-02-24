@@ -2,9 +2,9 @@ from django.shortcuts import render
 from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import RegisterUserSerializer
+from .serializers import *
 from rest_framework.permissions import AllowAny
-from .models import User
+from .models import *
 from django.db.models import Count
 
 
@@ -31,7 +31,14 @@ class RegisterUserApi(APIView):
     queryset = User.objects.all()'''
 
 
-class Users(generics.ListCreateAPIView):
+class UsersApi(generics.ListCreateAPIView):
     permission_classes = [AllowAny]
     serializer_class = RegisterUserSerializer
     queryset = User.objects.all()
+
+
+class CreateAuthorApi(generics.CreateAPIView):
+    permission_classes = (AllowAny,)
+    serializer_class = RegisterAuthorSerializer
+    queryset = Author.objects.all()
+
