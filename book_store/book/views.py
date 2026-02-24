@@ -1,15 +1,12 @@
-from django.shortcuts import render
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import json
 from django.http import HttpResponse, JsonResponse
 import datetime
 from django.views.decorators.csrf import csrf_exempt
-from .models import Book
 from rest_framework.views import APIView
-from .serializers import BookSerializer
+from .serializers import *
 from rest_framework import generics
-from django.db.models import Count
-from rest_framework.permissions import IsAuthenticated,AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
 def current_datetime(request):
@@ -72,25 +69,62 @@ class BookAPI(APIView):
         return JsonResponse(books, safe=False)
 
 
-class BOOKGenericsAPIGet(generics.ListCreateAPIView):
+class BookAPIList(generics.ListAPIView):
     permission_classes = (AllowAny,)
     serializer_class = BookSerializer
     queryset = Book.objects.all()
-    #queryset = Book.objects.annotate(total_images=Count('image_query'))
 
 
-class BOOKGenericsAPIDelete(generics.RetrieveDestroyAPIView):
+class PublishedBookAPIList(generics.ListAPIView):
+    serializer_class = BookSerializer
+    queryset = Book.objects.filter(is_published=True)
+
+class BOOKGenericsAPICreate(generics.CreateAPIView):
+    permission_classes = (AllowAny,)
+    serializer_class = BookSerializer
+
+
+    # queryset = Book.objects.annotate(total_images=Count('image_query'))
+
+
+class CreateImageeBookAPI(generics.RetrieveUpdateAPIView):
+    lookup_field = 'id'
+    permission_classes = (AllowAny,)
+    serializer_class = ImageSerializer
+    queryset = Book.objects.filter()
+    def add_image(self, request, book_id):
+        serializer_class = ImageSerializer(data=request.data)
+        book = Book.objects.get(id=book_id)
+        if serializer_class.is_valid():
+                image1=ImageBook.objects.create(
+                book=book,
+                image=request.FILES['image'],
+                name = request['name'],
+                description = request['description'])
+                image1.save()
+                book.image_book.add(image1)
+                return JsonResponse({"image_id": image1.id , "book_id": book_id})
+        else:
+                serializer_class = ImageSerializer()
+                return render(request, 'book_image.html', {'form': serializer_class})
+
+
+class BookGenericsAPIUpdate(generics.RetrieveUpdateAPIView):
+    lookup_field = 'id'
+    permission_classes = (AllowAny,)
     serializer_class = BookSerializer
     queryset = Book.objects.all()
-    lookup_field = 'id'
 
 
-class BOOKGenericsAPIPut(generics.UpdateAPIView):
+class GetOneBookAPI(generics.RetrieveAPIView):
     lookup_field = 'id'
+    permission_classes = (AllowAny,)
     serializer_class = BookSerializer
     queryset = Book.objects.all()
 
 
-class BOOKGenericsAPIPost(generics.CreateAPIView):
+class DeleteBookAPI(generics.RetrieveDestroyAPIView):
+    lookup_field = 'id'
     serializer_class = BookSerializer
+    permission_classes = (AllowAny,)
     queryset = Book.objects.all()

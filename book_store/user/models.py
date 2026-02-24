@@ -21,5 +21,11 @@ class User(AbstractUser):
 
     objects = CustomManager()
     all_objects = AllObjectsUserManager()
+
     def __str__(self):
         return self.username
+
+
+class Author(User):
+    name = models.CharField(max_length=100, unique=True, default="unknown")
+

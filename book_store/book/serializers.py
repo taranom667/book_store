@@ -1,19 +1,9 @@
-from http.client import responses
-
 from rest_framework import serializers
-from rest_framework.relations import StringRelatedField
 from .models import Book, ImageBook
-
-
-class BookImagesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ImageBook
-        fields = '__all__'
-
 
 class BookSerializer(serializers.ModelSerializer):
     # images=BookImagesSerializer(many=True,read_only=True)
-    images = StringRelatedField(many=True, read_only=True)
+    # images = StringRelatedField(many=True, read_only=True)
 
     def to_internal_value(self, data):
         data = super().to_internal_value(data=data)
@@ -24,6 +14,14 @@ class BookSerializer(serializers.ModelSerializer):
             res = super().validate(attrs=data)
             return res
 
+    def get(self, request):
+        return Book.objects.all()
+
+    def create(self, validated_data):
+        book = Book.objects.create(**validated_data)
+        book.save()
+        return book
+
     def to_representation(self, instance):
         respond = super().to_representation(instance=instance)
         # print(type(respond['published_date']))
@@ -32,5 +30,16 @@ class BookSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Book
-        fields =['__all__']
+        fields =['name','published_date','price','category','is_published','author']
 
+
+
+class  ImageSerializer(BookSerializer):
+    class Meta:
+        model = ImageBook
+        fields = '__all__'
+
+    def get(self, request):
+            return ImageBook.objects.all()
+    def create(self, validated_data):
+        pass
