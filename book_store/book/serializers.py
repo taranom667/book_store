@@ -1,3 +1,4 @@
+from django.contrib.admin.utils import lookup_field
 from rest_framework import serializers
 from .models import Book, ImageBook
 
@@ -30,7 +31,7 @@ class BookSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Book
-        fields =['name','published_date','price','category','is_published','author']
+        fields =['name','published_date','price','category','is_published','author','image_book']
 
 
 
@@ -43,3 +44,8 @@ class  ImageSerializer(BookSerializer):
             return ImageBook.objects.all()
     def create(self, validated_data):
         pass
+
+
+class ShowUserBooksSerializer(BookSerializer):
+     pass
+

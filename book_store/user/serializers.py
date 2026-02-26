@@ -21,18 +21,10 @@ class RegisterUserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User(
             username=validated_data['username'],
-            phone_number=validated_data['phone_number'],
-            password=validated_data['password'],
-            national_code=validated_data['national_code'])
-
-        user.set_password(validated_data['password'])
-        user.save()
+            password=validated_data['password'])
         return user
 
-    def validate(self, data):
-        if True:
-            res = super().validate(attrs=data)
-            return res
+
 
     def to_representation(self, instance):
         respond = super().to_representation(instance=instance)
@@ -44,14 +36,26 @@ class RegisterUserSerializer(serializers.ModelSerializer):
         else:
             return value
 
+''' def validate(self, data):
+        if True:
+            res = super().validate(attrs=data)
+            return res'''
 
 
 
 class RegisterAuthorSerializer(serializers.ModelSerializer):
-    def create(self,validated_data):
-        autor = Author.objects.create(**validated_data)
-        return autor
     class Meta:
         model = Author
-        fields=['name', 'phone_number', 'national_code','username','birth_day','is_deleted','nickname']
+        fields=['name','username','is_active','password','books',]
+    def create(self,validated_data):
+        password=validated_data.pop('password')
+        books = validated_data.pop('books')
+        author = Author.objects.create_user(password=password,**validated_data)
+        author.books.set(books)
+        return author
 
+
+    def to_representation(self, instance):
+        respond = super().to_representation(instance=instance)
+        instance.is_active = True
+        return respond

@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from .serializers import *
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
-
+from .paginations import *
 
 def current_datetime(request):
     print('request method is', request.method)
@@ -73,10 +73,12 @@ class BookAPIList(generics.ListAPIView):
     permission_classes = (AllowAny,)
     serializer_class = BookSerializer
     queryset = Book.objects.all()
+    pagination_class= StandardResultsSetPagination
 
 
 class PublishedBookAPIList(generics.ListAPIView):
     serializer_class = BookSerializer
+    permission_classes  = (AllowAny,)
     queryset = Book.objects.filter(is_published=True)
 
 class BOOKGenericsAPICreate(generics.CreateAPIView):
@@ -128,3 +130,14 @@ class DeleteBookAPI(generics.RetrieveDestroyAPIView):
     serializer_class = BookSerializer
     permission_classes = (AllowAny,)
     queryset = Book.objects.all()
+
+
+class ShowUserBooksAPI(generics.ListAPIView):
+    permission_classes = (AllowAny,)
+    serializer_class = ShowUserBooksSerializer
+    permission_classes= StandardResultsSetPagination
+
+    def get_queryset(self):
+        user = self.request.user
+        queryset =Book.objects.filter(author=user)
+        return queryset
