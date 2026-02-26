@@ -6,11 +6,10 @@ class CustomPermission(BasePermission):
         return True
 
 
-class  IsStaffPermission(BasePermission):
+class IsStaffPermission(BasePermission):
     def has_permission(self, request, view):
         if request.user.is_staff:
             return True
-
 
 
 class IsAuthorPermission(BasePermission):

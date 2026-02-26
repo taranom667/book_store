@@ -14,10 +14,10 @@ class AllObjectsUserManager(CustomManager):
 
 class User(AbstractUser):
     id = models.AutoField(primary_key=True)
-    phone_number = models.CharField(null=True,blank=True,max_length=11, unique=True)
+    phone_number = models.CharField(null=True, blank=True, max_length=11, unique=True)
     national_code = models.CharField(max_length=11, unique=True, null=True, blank=True)
     birth_day = models.DateField(null=True, blank=True)
-    is_deleted = models.BooleanField(default=False,null=True,blank=True)
+    is_deleted = models.BooleanField(default=False, null=True, blank=True)
 
     objects = CustomManager()
     all_objects = AllObjectsUserManager()
@@ -37,5 +37,4 @@ class Author(User):
     all_objects = AllObjectsUserManager()
 
     def __str__(self):
-            return str(self.id)+ "  "+self.username
-
+        return str(self.id) + "  " + self.username

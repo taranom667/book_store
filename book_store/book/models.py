@@ -1,4 +1,3 @@
-
 from django.db import models
 
 
@@ -31,10 +30,11 @@ class Book(BaseBook):
                         ('HS', 'history'),
                         ]
     price = models.IntegerField(null=True, blank=True)
-    category = models.CharField(max_length=100, choices=CATEGORY_CHOICES, db_index=True,null=True, blank=True)
+    category = models.CharField(max_length=100, choices=CATEGORY_CHOICES, db_index=True, null=True, blank=True)
     is_published = models.BooleanField(default=False)
-    image_book = models.ManyToManyField(ImageBook, related_name='books',null=True, blank=True)
-    author = models.ForeignKey('user.Author', related_name='books', on_delete=models.CASCADE,null=True,blank=True,default=None)
+    image_book = models.ManyToManyField(ImageBook, related_name='books', null=True, blank=True)
+    author = models.ForeignKey('user.Author', related_name='books', on_delete=models.CASCADE, null=True, blank=True,
+                               default=None)
 
     class Meta:
         verbose_name = 'Book'

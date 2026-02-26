@@ -9,6 +9,7 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .paginations import *
 
+
 def current_datetime(request):
     print('request method is', request.method)
     now = datetime.datetime.now()
@@ -73,18 +74,18 @@ class BookAPIList(generics.ListAPIView):
     permission_classes = (AllowAny,)
     serializer_class = BookSerializer
     queryset = Book.objects.all()
-    pagination_class= StandardResultsSetPagination
+    pagination_class = StandardResultsSetPagination
 
 
 class PublishedBookAPIList(generics.ListAPIView):
     serializer_class = BookSerializer
-    permission_classes  = (AllowAny,)
+    permission_classes = (AllowAny,)
     queryset = Book.objects.filter(is_published=True)
+
 
 class BOOKGenericsAPICreate(generics.CreateAPIView):
     permission_classes = (AllowAny,)
     serializer_class = BookSerializer
-
 
     # queryset = Book.objects.annotate(total_images=Count('image_query'))
 
@@ -94,21 +95,22 @@ class CreateImageeBookAPI(generics.RetrieveUpdateAPIView):
     permission_classes = (AllowAny,)
     serializer_class = ImageSerializer
     queryset = Book.objects.filter()
+
     def add_image(self, request, book_id):
         serializer_class = ImageSerializer(data=request.data)
         book = Book.objects.get(id=book_id)
         if serializer_class.is_valid():
-                image1=ImageBook.objects.create(
+            image1 = ImageBook.objects.create(
                 book=book,
                 image=request.FILES['image'],
-                name = request['name'],
-                description = request['description'])
-                image1.save()
-                book.image_book.add(image1)
-                return JsonResponse({"image_id": image1.id , "book_id": book_id})
+                name=request['name'],
+                description=request['description'])
+            image1.save()
+            book.image_book.add(image1)
+            return JsonResponse({"image_id": image1.id, "book_id": book_id})
         else:
-                serializer_class = ImageSerializer()
-                return render(request, 'book_image.html', {'form': serializer_class})
+            serializer_class = ImageSerializer()
+            return render(request, 'book_image.html', {'form': serializer_class})
 
 
 class BookGenericsAPIUpdate(generics.RetrieveUpdateAPIView):
@@ -135,9 +137,9 @@ class DeleteBookAPI(generics.RetrieveDestroyAPIView):
 class ShowUserBooksAPI(generics.ListAPIView):
     permission_classes = (AllowAny,)
     serializer_class = ShowUserBooksSerializer
-    permission_classes= StandardResultsSetPagination
+    permission_classes = StandardResultsSetPagination
 
     def get_queryset(self):
         user = self.request.user
-        queryset =Book.objects.filter(author=user)
+        queryset = Book.objects.filter(author=user)
         return queryset

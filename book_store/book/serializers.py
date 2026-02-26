@@ -2,6 +2,7 @@ from django.contrib.admin.utils import lookup_field
 from rest_framework import serializers
 from .models import Book, ImageBook
 
+
 class BookSerializer(serializers.ModelSerializer):
     # images=BookImagesSerializer(many=True,read_only=True)
     # images = StringRelatedField(many=True, read_only=True)
@@ -31,21 +32,20 @@ class BookSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Book
-        fields =['name','published_date','price','category','is_published','author','image_book']
+        fields = ['name', 'published_date', 'price', 'category', 'is_published', 'author', 'image_book']
 
 
-
-class  ImageSerializer(BookSerializer):
+class ImageSerializer(BookSerializer):
     class Meta:
         model = ImageBook
         fields = '__all__'
 
     def get(self, request):
-            return ImageBook.objects.all()
+        return ImageBook.objects.all()
+
     def create(self, validated_data):
         pass
 
 
 class ShowUserBooksSerializer(BookSerializer):
-     pass
-
+    pass

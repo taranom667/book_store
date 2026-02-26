@@ -117,10 +117,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 AUTH_USER_MODEL = 'user.User'
 
-
 STATIC_URL = 'static/'
-STATIC_ROOT= os.path.join(BASE_DIR, 'static')
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -130,11 +128,11 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
-   }
+}
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=29),
-    "AUTH_header_type": "Bearer",}
+    "AUTH_header_type": "Bearer", }
 
 MEDIA_URL = '/media/'
 
