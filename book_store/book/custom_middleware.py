@@ -20,32 +20,3 @@ class CustomMiddleware(object):
 
 
 
-
-
-
-
-'''  def process_request(self, request):
-        # Check if the request is for the login or logout views
-        if request.path == '/login/':
-            # Handle login logic
-            print("Login Request")
-            # You can perform any additional actions related to login here
-
-        elif request.path == '/logout/':
-            # Handle logout logic
-            print("Logout Request")
-            # You can perform any additional actions related to logout here
-        elif request.path == '/admin/':
-            print("Admin")
-'''
-'''     def process_request(self,request):
-         if request.path == '/login/':
-             return print('login request')
-         elif request.path == '/logout/':
-             print("Logout Request")
-         elif request.path == '/admin/':
-             print("Admin")
-
-     def process_response(self,request,response):
-         pass
-'''
