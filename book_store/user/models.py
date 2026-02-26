@@ -23,7 +23,7 @@ class User(AbstractUser):
     all_objects = AllObjectsUserManager()
 
     def __str__(self):
-        return str(self.id) + "  " + self.username
+        return str(self.id) + "  " + self.usernam
 
 
 class Author(User):
@@ -35,6 +35,8 @@ class Author(User):
         verbose_name_plural = "Authors"
 
     all_objects = AllObjectsUserManager()
+    def __str__(self):
+        return self.name
 
     def __str__(self):
         return str(self.id) + "  " + self.username
